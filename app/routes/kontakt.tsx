@@ -8,17 +8,17 @@ import { JsonLd } from "~/components/JsonLd";
 import { buildMeta } from "~/lib/seo";
 import { ContactSchema } from "~/lib/contact-schema";
 
-const SITE_URL = process.env.SITE_URL ?? "https://example.dk";
+const SITE_URL = "https://define-smart.dk";
 const PAGE_URL = `${SITE_URL}/kontakt`;
 
 export function meta(_: Route.MetaArgs) {
   return [
     ...buildMeta({
-      title: "Kontakt — Virksomhed",
+      title: "Kontakt | define waters A/S",
       description:
-        "Få et gratis, uforpligtende tilbud inden for 24 timer. Skriv eller ring — vi vender tilbage hurtigst muligt.",
+        "Kontakt define waters A/S for et gratis, uforpligtende tilbud på smart vandteknologi. Ring +45 21 22 16 06 eller skriv til info@define-waters.dk.",
       url: PAGE_URL,
-      siteName: "Virksomhed",
+      siteName: "define waters A/S",
       type: "website",
       locale: "da_DK",
     }),
@@ -85,8 +85,8 @@ export async function action({ request }: Route.ActionArgs) {
 const pageSchema = {
   "@context": "https://schema.org",
   "@type": "ContactPage",
-  name: "Kontakt – Virksomhed",
-  description: "Kontakt os for et gratis tilbud.",
+  name: "Kontakt — define waters A/S",
+  description: "Kontakt define waters A/S for et gratis tilbud på smart vandteknologi.",
   url: PAGE_URL,
   breadcrumb: {
     "@type": "BreadcrumbList",
@@ -104,8 +104,11 @@ const Arrow = () => (
 );
 
 const SERVICE_OPTIONS = [
+  "Vandovervågning & Sensorer",
+  "Datafangst & Analyse",
+  "Intelligent Vandforvaltning",
+  "Installation & Service",
   "Generel forespørgsel",
-  "Tilbud",
   "Support",
   "Andet",
 ];
@@ -155,7 +158,7 @@ function ContactForm() {
             style={{ position: "absolute", left: "-9999px", width: 1, height: 1, opacity: 0 }}
           />
           <h2>Få et gratis tilbud</h2>
-          <p className="sub">Udfyld formularen, så kontakter vi dig hurtigst muligt.</p>
+          <p className="sub">Udfyld formularen — vi vender tilbage inden for 24 timer med et uforpligtende tilbud.</p>
           {serverError && (
             <p className="sub" style={{ color: "var(--clr-accent, #e00)" }}>
               Der opstod en fejl — prøv igen eller ring til os direkte.
@@ -268,26 +271,26 @@ export default function Kontakt(_: Route.ComponentProps) {
       <main>
         <header className="phero">
           <div className="wrap">
-            <nav className="crumb reveal" aria-label="Brødkrumme">
+            <nav className="crumb" aria-label="Brødkrumme">
               <Link to="/">Forside</Link>
               <span className="sep">/</span>
-              <b>Kontakt</b>
+              <b style={{ color: "#F5FAFF" }}>Kontakt</b>
             </nav>
-            <p className="eyebrow reveal">Kontakt</p>
-            <h1 className="reveal d1">Lad os tage en snak</h1>
-            <p className="lead reveal d2">
-              Skriv eller ring — vi vender tilbage med et gratis, uforpligtende tilbud inden for
-              24 timer.
+            <p className="eyebrow">Kontakt</p>
+            <h1>Lad os tage en snak</h1>
+            <p className="lead">
+              Skriv eller ring — vi vender tilbage med et gratis, uforpligtende tilbud
+              inden for 24 timer.
             </p>
           </div>
         </header>
 
-        <section className="wrap" style={{ paddingBottom: "var(--pad-section)" }}>
+        <section className="wrap">
           <div className="kgrid">
             <ContactForm />
 
             <aside>
-              <div className="infocard reveal d1">
+              <div className="infocard">
                 <div className="iitem">
                   <span className="ii">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -296,7 +299,7 @@ export default function Kontakt(_: Route.ComponentProps) {
                   </span>
                   <div>
                     <div className="il">Ring til os</div>
-                    <div className="iv"><a href="tel:+4500000000">+45 00 00 00 00</a></div>
+                    <div className="iv"><a href="tel:+4521221606">+45 21 22 16 06</a></div>
                   </div>
                 </div>
                 <div className="iitem">
@@ -308,7 +311,19 @@ export default function Kontakt(_: Route.ComponentProps) {
                   </span>
                   <div>
                     <div className="il">Skriv til os</div>
-                    <div className="iv"><a href="mailto:info@example.dk">info@example.dk</a></div>
+                    <div className="iv"><a href="mailto:info@define-waters.dk">info@define-waters.dk</a></div>
+                  </div>
+                </div>
+                <div className="iitem">
+                  <span className="ii">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                      <circle cx="12" cy="10" r="3" />
+                    </svg>
+                  </span>
+                  <div>
+                    <div className="il">Adresse</div>
+                    <div className="iv">Boeslunde Byvej 76<br />4242 Boeslunde</div>
                   </div>
                 </div>
                 <div className="iitem">
@@ -320,7 +335,7 @@ export default function Kontakt(_: Route.ComponentProps) {
                   </span>
                   <div>
                     <div className="il">Åbningstider</div>
-                    <div className="iv">Man–fre 8–17</div>
+                    <div className="iv">Mandag–fredag: 08–17</div>
                   </div>
                 </div>
               </div>

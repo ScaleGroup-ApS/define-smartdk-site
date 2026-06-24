@@ -7,7 +7,7 @@
 FROM node:20-slim AS deps
 WORKDIR /app
 COPY package.json ./
-RUN npm install
+RUN npm install npm install
 
 # Stage 2: Build
 FROM node:20-slim AS build
@@ -29,8 +29,6 @@ WORKDIR /app
 COPY --from=production-deps /app/node_modules ./node_modules
 COPY --from=build /app/build ./build
 COPY --from=build /app/package.json ./package.json
-COPY --from=build /app/drizzle ./drizzle
-COPY --from=build /app/scripts ./scripts
 
 ENV NODE_ENV=production
 ENV PORT=3000

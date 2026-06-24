@@ -1,64 +1,40 @@
-/**
- * sitemap[.]xml route — served at /sitemap.xml
- *
- * Dynamically generates an XML sitemap from all published WordPress pages.
- */
 import type { Route } from "./+types/sitemap[.]xml";
-import { getPages, getPosts } from "~/lib/wp-api";
 
-export async function loader({ request }: Route.LoaderArgs) {
-  const siteUrl = new URL(request.url).origin;
+const SITE_URL = "https://define-smart.dk";
+const TODAY = "2026-06-24";
 
-  // Fetch all published pages and posts from WordPress
-  const [pages, posts] = await Promise.all([
-    getPages({ per_page: 100 }).catch(() => []),
-    getPosts({ per_page: 100 }).catch(() => []),
-  ]);
+const PAGES = [
+  { path: "",          priority: "1.0", changefreq: "daily",   lastmod: TODAY },
+  { path: "tjenester", priority: "0.9", changefreq: "weekly",  lastmod: TODAY },
+  { path: "priser",    priority: "0.8", changefreq: "weekly",  lastmod: TODAY },
+  { path: "om-os",     priority: "0.7", changefreq: "monthly", lastmod: TODAY },
+  { path: "kontakt",   priority: "0.7", changefreq: "monthly", lastmod: TODAY },
+];
 
-  const urls: Array<{ loc: string; lastmod: string; priority: string; changefreq: string }> = [];
+function escapeXml(str: string): string {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;");
+}
 
-  // Homepage
-  urls.push({
-    loc: siteUrl,
-    lastmod: new Date().toISOString().split("T")[0],
-    priority: "1.0",
-    changefreq: "daily",
+export function loader(_: Route.LoaderArgs) {
+  const urls = PAGES.map(({ path, priority, changefreq, lastmod }) => {
+    const loc = path ? `${SITE_URL}/${path}` : SITE_URL;
+    return `  <url>
+    <loc>${escapeXml(loc)}</loc>
+    <lastmod>${lastmod}</lastmod>
+    <changefreq>${changefreq}</changefreq>
+    <priority>${priority}</priority>
+  </url>`;
   });
-
-  // Pages
-  for (const page of pages) {
-    if (page.status !== "publish") continue;
-    urls.push({
-      loc: `${siteUrl}/${page.slug}`,
-      lastmod: page.modified_gmt.split("T")[0],
-      priority: "0.8",
-      changefreq: "weekly",
-    });
-  }
-
-  // Posts
-  for (const post of posts) {
-    if (post.status !== "publish") continue;
-    urls.push({
-      loc: `${siteUrl}/${post.slug}`,
-      lastmod: post.modified_gmt.split("T")[0],
-      priority: "0.6",
-      changefreq: "monthly",
-    });
-  }
 
   const xml = [
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
-    ...urls.map(
-      (u) =>
-        `  <url>
-    <loc>${escapeXml(u.loc)}</loc>
-    <lastmod>${u.lastmod}</lastmod>
-    <changefreq>${u.changefreq}</changefreq>
-    <priority>${u.priority}</priority>
-  </url>`
-    ),
+    ...urls,
     "</urlset>",
   ].join("\n");
 
@@ -69,13 +45,4 @@ export async function loader({ request }: Route.LoaderArgs) {
       "Cache-Control": "public, max-age=3600",
     },
   });
-}
-
-function escapeXml(str: string): string {
-  return str
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&apos;");
 }

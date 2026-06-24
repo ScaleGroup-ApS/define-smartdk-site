@@ -66,11 +66,10 @@ export function meta({ data }: Route.MetaArgs) {
 
 export default function CatchAll({ loaderData }: Route.ComponentProps) {
   const { page, siteInfo, siteUrl } = loaderData;
-  const siteName = siteInfo?.name ?? "Site";
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Header siteName={siteName} />
+      <Header />
 
       {/* JSON-LD Structured Data */}
       <JsonLd data={buildPageJsonLd({ page, siteInfo, siteUrl })} />
@@ -87,7 +86,7 @@ export default function CatchAll({ loaderData }: Route.ComponentProps) {
         </article>
       </main>
 
-      <Footer siteName={siteName} siteDescription={siteInfo?.description} />
+      <Footer />
     </div>
   );
 }

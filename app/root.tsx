@@ -10,16 +10,87 @@ import type { ReactNode } from "react";
 import type { Route } from "./+types/root";
 import "./app.css";
 
+const SITE_URL = "https://define-smart.dk";
+
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": `${SITE_URL}/#organization`,
+      name: "define waters A/S",
+      url: SITE_URL,
+      logo: {
+        "@type": "ImageObject",
+        url: `${SITE_URL}/logo.svg`,
+        width: 200,
+        height: 60,
+      },
+      contactPoint: {
+        "@type": "ContactPoint",
+        telephone: "+45-21-22-16-06",
+        email: "info@define-waters.dk",
+        contactType: "customer service",
+        availableLanguage: "Danish",
+        hoursAvailable: {
+          "@type": "OpeningHoursSpecification",
+          dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+          opens: "08:00",
+          closes: "17:00",
+        },
+      },
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: "Boeslunde Byvej 76",
+        addressLocality: "Boeslunde",
+        postalCode: "4242",
+        addressCountry: "DK",
+      },
+      sameAs: [SITE_URL],
+    },
+    {
+      "@type": "LocalBusiness",
+      "@id": `${SITE_URL}/#localbusiness`,
+      name: "define waters A/S",
+      url: SITE_URL,
+      telephone: "+45-21-22-16-06",
+      email: "info@define-waters.dk",
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: "Boeslunde Byvej 76",
+        addressLocality: "Boeslunde",
+        postalCode: "4242",
+        addressCountry: "DK",
+      },
+      geo: {
+        "@type": "GeoCoordinates",
+        latitude: 55.3333,
+        longitude: 11.3167,
+      },
+      openingHoursSpecification: [
+        {
+          "@type": "OpeningHoursSpecification",
+          dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+          opens: "08:00",
+          closes: "17:00",
+        },
+      ],
+      priceRange: "$$",
+    },
+  ],
+};
+
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
-  {
-    rel: "preconnect",
-    href: "https://fonts.gstatic.com",
-    crossOrigin: "anonymous",
-  },
+  { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
   {
     rel: "stylesheet",
-    href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
+    href: "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap",
+  },
+  {
+    rel: "preload",
+    as: "style",
+    href: "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap",
   },
 ];
 
@@ -31,6 +102,10 @@ export function Layout({ children }: { children: ReactNode }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+        />
       </head>
       <body className="min-h-screen bg-surface text-text antialiased">
         {children}

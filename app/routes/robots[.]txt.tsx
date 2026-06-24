@@ -5,19 +5,12 @@
  */
 import type { Route } from "./+types/robots[.]txt";
 
-export function loader({ request }: Route.LoaderArgs) {
-  const siteUrl = new URL(request.url).origin;
-
+export function loader(_: Route.LoaderArgs) {
   const robotsTxt = [
     "User-agent: *",
     "Allow: /",
     "",
-    "# WordPress admin — not publicly relevant",
-    "Disallow: /wp-admin/",
-    "Disallow: /wp-login.php",
-    "Disallow: /wp-json/",
-    "",
-    `Sitemap: ${siteUrl}/sitemap.xml`,
+    "Sitemap: https://define-smart.dk/sitemap.xml",
   ].join("\n");
 
   return new Response(robotsTxt, {

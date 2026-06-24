@@ -43,44 +43,6 @@ spec:
               value: "3000"
             - name: WP_API_URL
               value: "http://wordpress:80/wp-json"
-            # Database
-            - name: DB_HOST
-              value: "mariadb.{{NAMESPACE}}.svc.cluster.local"
-            - name: DB_PORT
-              value: "3306"
-            - name: DB_USER
-              value: "{{CUSTOMER_ID}}_user"
-            - name: DB_NAME
-              value: "{{CUSTOMER_ID}}_wp"
-            - name: DB_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: mariadb-secrets
-                  key: PASSWORD
-            - name: DB_SSL_CERT
-              value: "/etc/ssl/mariadb-client/tls.crt"
-            - name: DB_SSL_KEY
-              value: "/etc/ssl/mariadb-client/tls.key"
-            - name: DB_SSL_CA
-              value: "/etc/ssl/mariadb-ca/ca.crt"
-            # Contact form — submissions are forwarded to the CRM, which stores them
-            # centrally and emails the customer's chosen recipient. The recipient is
-            # managed in the CRM (no redeploy needed), so MAIL_TO/MAIL_FROM below are
-            # no longer used for routing and can be removed once all sites are migrated.
-            # crm-internal-secret is provisioned by the CRM during customer setup.
-            - name: CRM_INTERNAL_URL
-              value: "http://crm-backend.crm-system.svc.cluster.local:5000"
-            - name: CRM_INTERNAL_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: crm-internal-secret
-                  key: token
-            - name: CRM_CUSTOMER_SLUG
-              value: "{{CUSTOMER_SLUG}}"
-            - name: MAIL_FROM
-              value: "noreply@{{CUSTOMER_DOMAIN}}"
-            - name: MAIL_TO
-              value: "{{CUSTOMER_EMAIL}}"
 
           livenessProbe:
             httpGet:
@@ -107,22 +69,6 @@ spec:
             limits:
               cpu: 200m
               memory: 128Mi
-
-          volumeMounts:
-            - name: mariadb-client-cert
-              mountPath: /etc/ssl/mariadb-client
-              readOnly: true
-            - name: mariadb-ca
-              mountPath: /etc/ssl/mariadb-ca
-              readOnly: true
-
-      volumes:
-        - name: mariadb-client-cert
-          secret:
-            secretName: mariadb-client-cert
-        - name: mariadb-ca
-          secret:
-            secretName: mariadb-ca-bundle
 
       imagePullSecrets:
         - name: registry-credentials
