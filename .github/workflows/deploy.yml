@@ -7,7 +7,6 @@ on:
 
 env:
   REGISTRY: registry.scaleweb.dk
-  IMAGE_NAME: ${{ github.event.repository.name }}
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -46,14 +45,22 @@ jobs:
           password: ${{ secrets.REGISTRY_PASSWORD }}
 
       - name: Build and push image
+        env:
+          KUBERNETES_NAMESPACE: ${{ secrets.KUBERNETES_NAMESPACE }}
         run: |
+          set -euo pipefail
+          if [ -z "$KUBERNETES_NAMESPACE" ]; then
+            echo "KUBERNETES_NAMESPACE secret is required"
+            exit 1
+          fi
+          IMAGE_NAME="${KUBERNETES_NAMESPACE}-site"
           docker buildx build \
             --platform linux/arm64 \
             --file ./Dockerfile \
             --cache-from type=gha \
             --cache-to type=gha,mode=max \
-            --tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest \
-            --tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.short-sha }} \
+            --tag ${{ env.REGISTRY }}/${IMAGE_NAME}:latest \
+            --tag ${{ env.REGISTRY }}/${IMAGE_NAME}:${{ steps.meta.outputs.short-sha }} \
             --push \
             --label org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }} \
             --label org.opencontainers.image.revision=${{ github.sha }} \
@@ -131,10 +138,12 @@ jobs:
         env:
           SHORT_SHA: ${{ needs.build-and-push.outputs.short-sha }}
         run: |
+          set -euo pipefail
+          IMAGE_NAME="${NAMESPACE}-site"
           echo "Deploying with image tag: ${SHORT_SHA}"
 
           kubectl set image deployment/customer-site \
-            customer-site=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${SHORT_SHA} \
+            customer-site=${{ env.REGISTRY }}/${IMAGE_NAME}:${SHORT_SHA} \
             -n "$NAMESPACE"
 
           echo "Waiting for rollouts..."
