@@ -4,15 +4,17 @@ import { Header } from "~/components/Header";
 import { Footer } from "~/components/Footer";
 import { JsonLd } from "~/components/JsonLd";
 import { buildMeta } from "~/lib/seo";
+import { WaveCanvas, MiniFlowCanvas, CountUp, LiveFlow } from "~/components/Visuals";
+import { DashboardPanels } from "~/components/DashboardPanels";
 
 const SITE_URL = "https://define-smart.dk";
 
 export function meta(_: Route.MetaArgs) {
   return [
     ...buildMeta({
-      title: "Forside | define waters A/S",
+      title: "Define Smart | Live vandintelligens — define waters A/S",
       description:
-        "define waters A/S leverer smart vandteknologi — præcise måleinstrumenter, IoT-sensorer og intelligent overvågning til industri og landbrug i Danmark.",
+        "Define Smart forvandler vandmålere og maskiner til live intelligens: realtidsforbrug, automatisk lækagevarsling og forudsigelige filterskift. Plug-and-play på 2 minutter.",
       url: SITE_URL,
       siteName: "define waters A/S",
       type: "website",
@@ -25,48 +27,18 @@ export function meta(_: Route.MetaArgs) {
 const pageSchema = {
   "@context": "https://schema.org",
   "@type": "WebPage",
-  name: "Forside — define waters A/S",
+  name: "Define Smart — Live vandintelligens",
   description:
-    "Smart vandteknologi til industri og landbrug. Præcise måleinstrumenter, IoT-sensorer og intelligent vandovervågning.",
+    "Realtidsovervågning, lækagevarsling og forudsigeligt filterskift for vandmålere og maskiner.",
   url: SITE_URL,
 };
 
-const SERVICES = [
-  {
-    title: "Vandovervågning",
-    desc: "Kontinuerlig, realtids overvågning af vandkvalitet og -mængde med præcise IoT-sensorer.",
-    iconPath: "M12 2a7 7 0 0 1 7 7c0 5-7 13-7 13S5 14 5 9a7 7 0 0 1 7-7zM12 9m-2.5 0a2.5 2.5 0 1 0 5 0 2.5 2.5 0 0 0-5 0",
-  },
-  {
-    title: "Dataanalyse",
-    desc: "Avanceret datafangst og analyse, der omsætter målinger til handlingsbare indsigter.",
-    iconPath: "M2 3h20v14H2zM8 21h8M12 17v4M6 8h4M6 11h6M6 14h3",
-  },
-  {
-    title: "Smart Forvaltning",
-    desc: "Intelligent vandforvaltning med automatiserede alarmer, rapporter og optimeringsfunktioner.",
-    iconPath: "M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10zM9 12l2 2 4-4",
-  },
-  {
-    title: "Installation & Service",
-    desc: "Professionel installation, kalibrering og løbende service af alle målesystemer.",
-    iconPath: "M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z",
-  },
-];
-
-const STATS = [
-  { value: "500+", label: "Installationer" },
-  { value: "99.8%", label: "Oppetid" },
-  { value: "15+", label: "Års erfaring" },
-  { value: "24/7", label: "Overvågning" },
-];
-
-const WHY_US = [
-  { title: "Dansk kvalitet", desc: "Alle systemer er designet og testet under danske klimaforhold." },
-  { title: "±0,1 % nøjagtighed", desc: "Kalibrerede sensorer sikrer pålidelige data til dine beslutninger." },
-  { title: "Nem integration", desc: "Åbne API'er gør det let at integrere med SCADA og ERP-systemer." },
-  { title: "Lokal support", desc: "Vores teknikere er baseret i Danmark og klar til at hjælpe hurtigt." },
-];
+const card: React.CSSProperties = {
+  background: "#fff",
+  border: "1px solid #E2ECF4",
+  borderRadius: 18,
+  padding: 30,
+};
 
 export default function Index(_: Route.ComponentProps) {
   return (
@@ -76,176 +48,199 @@ export default function Index(_: Route.ComponentProps) {
 
       <main>
         {/* Hero */}
-        <section
-          style={{
-            background: "linear-gradient(135deg, #0A1628 0%, #0056A0 60%, #003D75 100%)",
-            borderBottom: "4px solid #0A1628",
-            padding: "5rem 0 4rem",
-            position: "relative",
-            overflow: "hidden",
-          }}
-          aria-labelledby="hero-heading"
-        >
-          <div
-            style={{
-              position: "absolute",
-              inset: 0,
-              backgroundImage: "radial-gradient(ellipse 60% 50% at 80% 50%, rgba(0,181,204,0.18) 0%, transparent 70%)",
-              pointerEvents: "none",
-            }}
-            aria-hidden="true"
-          />
-          <div className="wrap" style={{ position: "relative" }}>
-            <div
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "0.5rem",
-                padding: "0.375rem 1rem",
-                background: "rgba(0,181,204,0.12)",
-                border: "2px solid #00B5CC",
-                marginBottom: "1.5rem",
-              }}
-            >
-              <span style={{ fontFamily: '"Space Grotesk", system-ui, sans-serif', fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase" as const, letterSpacing: "0.1em", color: "#00B5CC" }}>
-                Smart vandteknologi
-              </span>
+        <section style={{ position: "relative", overflow: "hidden", background: "linear-gradient(180deg,#F4F9FD 0%,#E7F2FB 100%)" }}>
+          <WaveCanvas interactive />
+          <div style={{ position: "relative", maxWidth: 1200, margin: "0 auto", padding: "96px 32px 120px" }}>
+            <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "#fff", border: "1px solid #D7E8F5", padding: "7px 14px", borderRadius: 100, fontSize: 13, fontWeight: 600, color: "#0A7F8C", marginBottom: 26, boxShadow: "0 4px 14px rgba(11,39,64,0.05)" }}>
+              <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#15B6CF", animation: "ds-pulse 1.8s ease-in-out infinite" }} />
+              Live vandintelligens — uden WiFi, uden besvær
             </div>
-
-            <h1
-              id="hero-heading"
-              style={{
-                fontFamily: '"Space Grotesk", system-ui, sans-serif',
-                fontSize: "clamp(2.75rem, 6vw, 5rem)",
-                fontWeight: 800,
-                color: "#F5FAFF",
-                lineHeight: 1.05,
-                letterSpacing: "-0.03em",
-                margin: "0 0 1.5rem",
-                maxWidth: "820px",
-              }}
-              className="reveal"
-            >
-              Præcis vandovervågning{" "}
-              <span style={{ color: "#00B5CC" }}>til fremtiden</span>
+            <h1 className="ds-h1" style={{ fontSize: 64, lineHeight: 1.04, letterSpacing: "-0.035em", fontWeight: 800, margin: "0 0 22px", maxWidth: 780, textWrap: "balance" }}>
+              Kend hver dråbe,<br />før den koster dig.
             </h1>
-
-            <p
-              style={{ fontSize: "clamp(1.0625rem, 2vw, 1.25rem)", color: "rgba(245,250,255,0.8)", maxWidth: "580px", lineHeight: 1.65, margin: "0 0 2.5rem" }}
-              className="reveal d1"
-            >
-              Vi leverer intelligente målesystemer, IoT-sensorer og cloud-baseret
-              dataanalyse — fuld kontrol over jeres vandressourcer.
+            <p style={{ fontSize: 20, lineHeight: 1.5, color: "#3C566B", maxWidth: 580, margin: "0 0 36px" }}>
+              Define Smart forvandler almindelige vandmålere og maskiner til live intelligens — realtidsforbrug, automatisk lækagevarsling og forudsigelige filterskift. Plug-and-play på 2 minutter, kører på sit eget net.
             </p>
-
-            <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }} className="reveal d2">
-              <Link to="/tjenester" className="nb-btn nb-btn-accent">Se vores tjenester</Link>
-              <Link to="/kontakt" className="nb-btn nb-btn-white">Kontakt os</Link>
+            <div style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
+              <Link to="/kontakt" style={{ background: "#0E63C7", color: "#fff", padding: "15px 28px", borderRadius: 12, fontWeight: 600, fontSize: 16, textDecoration: "none", boxShadow: "0 10px 26px rgba(14,99,199,0.3)" }}>Book en demo</Link>
+              <Link to="/dashboard" style={{ background: "#fff", color: "#0B2740", border: "1px solid #CFE1F0", padding: "15px 28px", borderRadius: 12, fontWeight: 600, fontSize: 16, textDecoration: "none" }}>Se dashboardet →</Link>
             </div>
-          </div>
-        </section>
-
-        {/* Stats */}
-        <section style={{ background: "#0056A0", borderBottom: "4px solid #0A1628", padding: "2rem 0" }} aria-label="Nøgletal">
-          <div className="wrap">
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "1rem" }}>
-              {STATS.map(({ value, label }) => (
-                <div key={label} style={{ textAlign: "center", padding: "0.5rem" }}>
-                  <div style={{ fontFamily: '"Space Grotesk", system-ui, sans-serif', fontSize: "clamp(1.75rem, 3vw, 2.5rem)", fontWeight: 800, color: "#00B5CC", letterSpacing: "-0.03em", lineHeight: 1, marginBottom: "0.25rem" }}>
-                    {value}
-                  </div>
-                  <div style={{ fontFamily: '"DM Sans", system-ui, sans-serif', fontSize: "0.8125rem", color: "rgba(245,250,255,0.75)", textTransform: "uppercase" as const, letterSpacing: "0.08em", fontWeight: 600 }}>
-                    {label}
-                  </div>
+            <div style={{ display: "flex", gap: 40, marginTop: 64, flexWrap: "wrap" }}>
+              {[
+                { target: 1240000000, fmt: "liters" as const, label: "liter overvåget" },
+                { target: 38, fmt: "percent" as const, label: "mindre vandspild i snit" },
+                { target: 500, fmt: "plus" as const, label: "installationer" },
+                { target: 60, fmt: "seconds" as const, label: "svartid på varsler" },
+              ].map((s) => (
+                <div key={s.label}>
+                  <CountUp target={s.target} fmt={s.fmt} style={{ fontFamily: '"IBM Plex Mono", monospace', fontSize: 30, fontWeight: 600, color: "#0E63C7" }} />
+                  <div style={{ fontSize: 13, color: "#58728A", marginTop: 2 }}>{s.label}</div>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* Services */}
-        <section style={{ padding: "5rem 0", background: "#F5FAFF" }} aria-labelledby="services-heading">
-          <div className="wrap">
-            <div style={{ marginBottom: "3rem", maxWidth: "560px" }}>
-              <p className="eyebrow">Vores tjenester</p>
-              <h2 id="services-heading" style={{ fontFamily: '"Space Grotesk", system-ui, sans-serif', fontSize: "clamp(2rem, 4vw, 3rem)", fontWeight: 800, color: "#0A1628", letterSpacing: "-0.02em", lineHeight: 1.1, margin: "0 0 1rem" }}>
-                Alt inden for vandteknologi
-              </h2>
-              <p style={{ color: "#4A6080", fontSize: "1.0625rem", lineHeight: 1.65, margin: 0 }}>
-                Fra sensor til skyløsning — vi dækker hele kæden og sikrer, at din virksomhed altid har de rigtige data.
-              </p>
-            </div>
-
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "1.5rem" }}>
-              {SERVICES.map(({ title, desc, iconPath }) => (
-                <article
-                  key={title}
-                  style={{ background: "#F5FAFF", border: "2px solid #0A1628", boxShadow: "4px 4px 0px #0A1628", padding: "2rem" }}
-                >
-                  <div style={{ width: 56, height: 56, background: "#E8F3FF", border: "2px solid #0056A0", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1.25rem", color: "#0056A0" }}>
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                      <path d={iconPath} />
-                    </svg>
-                  </div>
-                  <h3 style={{ fontFamily: '"Space Grotesk", system-ui, sans-serif', fontSize: "1.25rem", fontWeight: 700, color: "#0A1628", margin: "0 0 0.75rem" }}>
-                    {title}
-                  </h3>
-                  <p style={{ color: "#4A6080", lineHeight: 1.6, margin: 0, fontSize: "0.9375rem" }}>{desc}</p>
-                </article>
+        {/* Trust band */}
+        <section style={{ background: "#fff", borderTop: "1px solid #E2ECF4", borderBottom: "1px solid #E2ECF4" }}>
+          <div style={{ maxWidth: 1200, margin: "0 auto", padding: "30px 32px", display: "flex", alignItems: "center", gap: 36, flexWrap: "wrap", justifyContent: "center" }}>
+            <span style={{ fontSize: 13, fontWeight: 600, color: "#8499A9", letterSpacing: "0.04em", textTransform: "uppercase" }}>
+              Betroet af serviceteams på 500+ installationer i hele Danmark
+            </span>
+            <div style={{ display: "flex", gap: 34, flexWrap: "wrap", alignItems: "center", opacity: 0.6 }}>
+              {["NORDIQ", "Vantage Ejd.", "HydroCorp", "Meridian", "CIVIC VAND"].map((n) => (
+                <span key={n} style={{ fontWeight: 800, fontSize: 18, letterSpacing: "-0.02em", color: "#0B2740" }}>{n}</span>
               ))}
             </div>
+          </div>
+        </section>
 
-            <div style={{ marginTop: "2.5rem", textAlign: "center" }}>
-              <Link to="/tjenester" className="nb-btn nb-btn-primary">Se alle tjenester →</Link>
+        {/* Why Define Smart */}
+        <section style={{ maxWidth: 1200, margin: "0 auto", padding: "96px 32px 40px" }}>
+          <div style={{ maxWidth: 640, marginBottom: 48 }}>
+            <div style={{ fontSize: 14, fontWeight: 600, color: "#15B6CF", letterSpacing: "0.04em", textTransform: "uppercase", marginBottom: 14 }}>Hvorfor Define Smart</div>
+            <h2 className="ds-h2" style={{ fontSize: 40, lineHeight: 1.1, letterSpacing: "-0.03em", fontWeight: 800, margin: 0 }}>Hver måler og maskine, der arbejder for jer.</h2>
+          </div>
+          <div className="ds-grid-3" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 22 }}>
+            <div style={card}>
+              <div style={{ width: 46, height: 46, borderRadius: 12, background: "linear-gradient(150deg,#E7F6FA,#D6ECFA)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 20 }}>
+                <div style={{ width: 16, height: 16, border: "3px solid #0E63C7", borderRadius: "50%", borderRightColor: "transparent", animation: "spin 3s linear infinite" }} />
+              </div>
+              <h3 style={{ fontSize: 20, fontWeight: 700, margin: "0 0 10px", letterSpacing: "-0.01em" }}>Realtidsovervågning</h3>
+              <p style={{ fontSize: 15, lineHeight: 1.55, color: "#58728A", margin: 0 }}>Se forbruget flyde på tværs af hver måler og maskine, sekund for sekund — ikke på næste måneds regning.</p>
+            </div>
+            <div style={card}>
+              <div style={{ width: 46, height: 46, borderRadius: 12, background: "linear-gradient(150deg,#E7F6FA,#D9F2EC)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 20 }}>
+                <div style={{ width: 18, height: 18, border: "3px solid #0A7F8C", borderRadius: 5, transform: "rotate(45deg)" }} />
+              </div>
+              <h3 style={{ fontSize: 20, fontWeight: 700, margin: "0 0 10px", letterSpacing: "-0.01em" }}>Forudsigeligt filterskift</h3>
+              <p style={{ fontSize: 15, lineHeight: 1.55, color: "#58728A", margin: 0 }}>Vi beregner filterkapacitet ud fra type og vandets hårdhed, måler forbruget og planlægger næste skift efter faktisk brug.</p>
+            </div>
+            <div style={card}>
+              <div style={{ width: 46, height: 46, borderRadius: 12, background: "linear-gradient(150deg,#FDECEC,#FBE3EC)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 20 }}>
+                <span style={{ width: 10, height: 10, borderRadius: "50%", background: "#E0556B", animation: "ds-pulse 1.4s infinite" }} />
+              </div>
+              <h3 style={{ fontSize: 20, fontWeight: 700, margin: "0 0 10px", letterSpacing: "-0.01em" }}>Lækage- &amp; anomalivarsling</h3>
+              <p style={{ fontSize: 15, lineHeight: 1.55, color: "#58728A", margin: 0 }}>Fang lækager og natlige udsving i det øjeblik de opstår. Regler I selv sætter, varsler der hvor I arbejder.</p>
             </div>
           </div>
         </section>
 
-        {/* Why us */}
-        <section style={{ background: "#0A1628", borderTop: "4px solid #0A1628", borderBottom: "4px solid #0A1628", padding: "5rem 0" }} aria-labelledby="why-heading">
-          <div className="wrap">
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "4rem", alignItems: "center" }}>
+        {/* Industries */}
+        <section style={{ maxWidth: 1200, margin: "0 auto", padding: "80px 32px 40px" }}>
+          <div style={{ maxWidth: 640, marginBottom: 48 }}>
+            <div style={{ fontSize: 14, fontWeight: 600, color: "#15B6CF", letterSpacing: "0.04em", textTransform: "uppercase", marginBottom: 14 }}>Brancher</div>
+            <h2 className="ds-h2" style={{ fontSize: 40, lineHeight: 1.1, letterSpacing: "-0.03em", fontWeight: 800, margin: "0 0 14px" }}>Bygget til, hvor vand betyder mest.</h2>
+            <p style={{ fontSize: 18, lineHeight: 1.5, color: "#58728A", margin: 0 }}>Samme platform — tilpasset jeres virkelighed. Se hvordan teams bruger Define Smart.</p>
+          </div>
+          <div className="ds-grid-2" style={{ display: "grid", gridTemplateColumns: "repeat(2,1fr)", gap: 22 }}>
+            {[
+              { icon: <div style={{ width: 18, height: 22, border: "3px solid #0E63C7", borderRadius: 3 }} />, bg: "linear-gradient(150deg,#E7F2FB,#D6ECFA)", title: "Erhvervsejendomme", desc: "Stop skjulte lækager, før de når lejernes regning. Fordel forbrug pr. lejer og dokumentér ESG-besparelser.", stat: "−32% vandspild" },
+              { icon: <div style={{ width: 20, height: 20, border: "3px solid #0A7F8C", borderRadius: "50%", borderTopColor: "transparent", animation: "spin 3s linear infinite" }} />, bg: "linear-gradient(150deg,#E7F2FB,#D9F2EC)", title: "Industri & produktion", desc: "Overvåg køling, proces og rengøring i realtid. Fang udsving, før de stopper linjen.", stat: "<60s varsling" },
+              { icon: <span style={{ width: 10, height: 10, borderRadius: "50%", background: "#19C0D6" }} />, bg: "linear-gradient(150deg,#FDF1E7,#FBE9DA)", title: "HoReCa & kontor", desc: "Forudsig filterskift på kaffemaskiner og udskænkning. Færre nedbrud, gladere gæster, smartere serviceruter.", stat: "2 min montage" },
+              { icon: <div style={{ width: 20, height: 20, background: "linear-gradient(150deg,#19C0D6,#0E63C7)", borderRadius: "50% 50% 50% 2px", transform: "rotate(45deg)" }} />, bg: "linear-gradient(150deg,#E7F2FB,#D6ECFA)", title: "Forsyning & kommune", desc: "Overvåg distribueret forbrug på tværs af målere og find tab i ledningsnettet hurtigt.", stat: "1/sek måling" },
+            ].map((b) => (
+              <div key={b.title} style={{ ...card, padding: 32, display: "flex", gap: 20, alignItems: "flex-start" }}>
+                <div style={{ flex: "none", width: 52, height: 52, borderRadius: 14, background: b.bg, display: "flex", alignItems: "center", justifyContent: "center" }}>{b.icon}</div>
+                <div>
+                  <h3 style={{ fontSize: 19, fontWeight: 700, margin: "0 0 8px" }}>{b.title}</h3>
+                  <p style={{ fontSize: 15, lineHeight: 1.55, color: "#58728A", margin: "0 0 14px" }}>{b.desc}</p>
+                  <div style={{ display: "inline-flex", alignItems: "center", gap: 8, fontFamily: '"IBM Plex Mono", monospace', fontSize: 14, fontWeight: 600, color: "#0A7F8C", background: "#E7F6FA", padding: "5px 11px", borderRadius: 8 }}>{b.stat}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* How it works (dark) */}
+        <section style={{ maxWidth: 1200, margin: "0 auto", padding: "64px 32px" }}>
+          <div style={{ background: "linear-gradient(160deg,#0B2740,#0A3A66)", borderRadius: 26, padding: 54, position: "relative", overflow: "hidden" }}>
+            <WaveCanvas variant="dark" style={{ top: "auto", height: "55%", opacity: 0.9 }} />
+            <div className="ds-split" style={{ position: "relative", display: "grid", gridTemplateColumns: "1.1fr 1fr", gap: 48, alignItems: "center" }}>
               <div>
-                <p className="eyebrow">Hvorfor define waters?</p>
-                <h2 id="why-heading" style={{ fontFamily: '"Space Grotesk", system-ui, sans-serif', fontSize: "clamp(2rem, 4vw, 3rem)", fontWeight: 800, color: "#F5FAFF", letterSpacing: "-0.02em", lineHeight: 1.1, margin: "0 0 1.25rem" }}>
-                  Teknologi du kan regne med
-                </h2>
-                <p style={{ color: "rgba(245,250,255,0.7)", fontSize: "1.0625rem", lineHeight: 1.65, margin: "0 0 2rem" }}>
-                  define waters A/S er grundlagt med ét formål: at give virksomheder og kommuner de bedste
-                  forudsætninger for ansvarlig vandforvaltning — med dansk kvalitet og præcis teknologi.
-                </p>
-                <Link to="/om-os" className="nb-btn nb-btn-accent">Læs om os →</Link>
+                <div style={{ fontSize: 14, fontWeight: 600, color: "#5FD3E6", letterSpacing: "0.04em", textTransform: "uppercase", marginBottom: 14 }}>Sådan virker det</div>
+                <h2 style={{ fontSize: 36, lineHeight: 1.12, letterSpacing: "-0.03em", fontWeight: 800, color: "#fff", margin: "0 0 30px" }}>Fra måler til beslutning i tre trin.</h2>
+                <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+                  {[
+                    { n: "1", t: "Installér", d: "Plug-and-play flowmåler klikkes på enhver maskine på 2 minutter. Ingen VVS, ingen WiFi." },
+                    { n: "2", t: "Forbind", d: "Data flyder til skyen på vores eget IoT-net. Intet at konfigurere, 5 års batteri." },
+                    { n: "3", t: "Handl", d: "Dashboard, varsler og smarte arbejdsordrer planlægger service efter nærhed — så I kører smartere." },
+                  ].map((s) => (
+                    <div key={s.n} style={{ display: "flex", gap: 16 }}>
+                      <div style={{ flex: "none", width: 34, height: 34, borderRadius: 10, background: "rgba(95,211,230,0.16)", color: "#5FD3E6", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: '"IBM Plex Mono", monospace', fontWeight: 600 }}>{s.n}</div>
+                      <div>
+                        <div style={{ color: "#fff", fontWeight: 600, fontSize: 17, marginBottom: 3 }}>{s.t}</div>
+                        <div style={{ color: "#9DB6CC", fontSize: 15, lineHeight: 1.5 }}>{s.d}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
-
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.25rem" }}>
-                {WHY_US.map(({ title, desc }) => (
-                  <div key={title} style={{ background: "rgba(245,250,255,0.05)", border: "2px solid rgba(245,250,255,0.12)", padding: "1.5rem" }}>
-                    <div style={{ width: 8, height: 8, background: "#00B5CC", marginBottom: "0.875rem" }} aria-hidden="true" />
-                    <h3 style={{ fontFamily: '"Space Grotesk", system-ui, sans-serif', fontSize: "1rem", fontWeight: 700, color: "#F5FAFF", margin: "0 0 0.5rem" }}>{title}</h3>
-                    <p style={{ color: "rgba(245,250,255,0.6)", fontSize: "0.875rem", lineHeight: 1.6, margin: 0 }}>{desc}</p>
+              <div style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 18, padding: 22, backdropFilter: "blur(6px)" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
+                  <span style={{ color: "#fff", fontWeight: 600, fontSize: 15 }}>Live flow — Bygning B</span>
+                  <span style={{ display: "inline-flex", alignItems: "center", gap: 6, color: "#5FD3E6", fontSize: 12, fontFamily: '"IBM Plex Mono", monospace' }}>
+                    <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#5FD3E6", animation: "ds-pulse 1.6s infinite" }} />LIVE
+                  </span>
+                </div>
+                <MiniFlowCanvas />
+                <div style={{ display: "flex", gap: 18, marginTop: 14 }}>
+                  <div>
+                    <LiveFlow unit={false} style={{ color: "#5FD3E6", fontFamily: '"IBM Plex Mono", monospace', fontSize: 22, fontWeight: 600 }} />
+                    <div style={{ color: "#7E99B2", fontSize: 12 }}>L / min</div>
                   </div>
-                ))}
+                  <div>
+                    <div style={{ color: "#fff", fontFamily: '"IBM Plex Mono", monospace', fontSize: 22, fontWeight: 600 }}>2.418</div>
+                    <div style={{ color: "#7E99B2", fontSize: 12 }}>i dag (L)</div>
+                  </div>
+                  <div>
+                    <div style={{ color: "#fff", fontFamily: '"IBM Plex Mono", monospace', fontSize: 22, fontWeight: 600 }}>0</div>
+                    <div style={{ color: "#7E99B2", fontSize: 12 }}>aktive lækager</div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* CTA */}
-        <section style={{ background: "#E8F3FF", borderBottom: "4px solid #0A1628", padding: "5rem 0" }} aria-labelledby="cta-heading">
-          <div className="wrap" style={{ textAlign: "center", maxWidth: "680px", margin: "0 auto" }}>
-            <p className="eyebrow" style={{ color: "#0056A0" }}>Kom i gang</p>
-            <h2 id="cta-heading" style={{ fontFamily: '"Space Grotesk", system-ui, sans-serif', fontSize: "clamp(2rem, 4vw, 3rem)", fontWeight: 800, color: "#0A1628", letterSpacing: "-0.02em", lineHeight: 1.1, margin: "0 0 1.25rem" }}>
-              Klar til smartere vandforvaltning?
-            </h2>
-            <p style={{ color: "#4A6080", fontSize: "1.0625rem", lineHeight: 1.65, margin: "0 0 2.5rem" }}>
-              Kontakt os for en uforpligtende snak om, hvordan vi kan hjælpe din virksomhed
-              med at optimere vandforbrug og sikre lovpligtig dokumentation.
-            </p>
-            <div style={{ display: "flex", gap: "1rem", justifyContent: "center", flexWrap: "wrap" }}>
-              <Link to="/kontakt" className="nb-btn nb-btn-primary">Få et gratis tilbud</Link>
-              <Link to="/priser" className="nb-btn nb-btn-outline">Se priser</Link>
+        {/* Dashboard / app showcase */}
+        <section style={{ maxWidth: 1200, margin: "0 auto", padding: "40px 32px 24px" }}>
+          <div style={{ maxWidth: 640, marginBottom: 40 }}>
+            <div style={{ fontSize: 14, fontWeight: 600, color: "#15B6CF", letterSpacing: "0.04em", textTransform: "uppercase", marginBottom: 14 }}>Appen</div>
+            <h2 className="ds-h2" style={{ fontSize: 40, lineHeight: 1.1, letterSpacing: "-0.03em", fontWeight: 800, margin: "0 0 14px" }}>Og ja — der følger en app med.</h2>
+            <p style={{ fontSize: 18, lineHeight: 1.5, color: "#58728A", margin: 0 }}>Hver måler, varsel og arbejdsordre samlet ét sted. Følg forbruget live på desktop og mobil — fra hele porteføljen ned til en enkelt ventil.</p>
+          </div>
+
+          {/* App window */}
+          <div style={{ borderRadius: 18, border: "1px solid #E2ECF4", overflow: "hidden", boxShadow: "0 30px 60px rgba(11,39,64,0.12)", background: "#fff" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 14, padding: "14px 18px", borderBottom: "1px solid #E2ECF4", background: "#fff" }}>
+              <div style={{ display: "flex", gap: 7 }}>
+                <span style={{ width: 11, height: 11, borderRadius: "50%", background: "#E0556B" }} />
+                <span style={{ width: 11, height: 11, borderRadius: "50%", background: "#E4B33C" }} />
+                <span style={{ width: 11, height: 11, borderRadius: "50%", background: "#3CB97A" }} />
+              </div>
+              <div className="ds-hide-sm" style={{ flex: 1, display: "flex", justifyContent: "center" }}>
+                <span style={{ fontFamily: '"IBM Plex Mono", monospace', fontSize: 13, color: "#8499A9", background: "#F4F9FD", border: "1px solid #E2ECF4", borderRadius: 8, padding: "4px 14px" }}>app.define-smart.dk</span>
+              </div>
+              <span style={{ display: "inline-flex", alignItems: "center", gap: 7, background: "#E4F6EF", color: "#0A8F5E", padding: "6px 11px", borderRadius: 8, fontSize: 12, fontWeight: 600 }}>
+                <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#0A8F5E", animation: "ds-pulse 1.6s infinite" }} />Live
+              </span>
+            </div>
+            <div style={{ background: "#EEF4FA", padding: 22 }}>
+              <DashboardPanels />
             </div>
           </div>
+
+          <div style={{ marginTop: 26, textAlign: "center" }}>
+            <Link to="/dashboard" style={{ display: "inline-block", background: "#fff", color: "#0B2740", border: "1px solid #CFE1F0", padding: "14px 28px", borderRadius: 12, fontWeight: 600, fontSize: 16, textDecoration: "none" }}>Udforsk hele dashboardet →</Link>
+          </div>
+        </section>
+
+        {/* Final CTA */}
+        <section style={{ maxWidth: 1200, margin: "0 auto", padding: "56px 32px 110px", textAlign: "center" }}>
+          <h2 className="ds-h2" style={{ fontSize: 38, lineHeight: 1.12, letterSpacing: "-0.03em", fontWeight: 800, margin: "0 0 16px" }}>Få overblik over jeres vand.</h2>
+          <p style={{ fontSize: 18, color: "#58728A", maxWidth: 540, margin: "0 auto 30px" }}>Book en 20-minutters demo, så viser vi live data fra en lokation som jeres.</p>
+          <Link to="/kontakt" style={{ display: "inline-block", background: "#0E63C7", color: "#fff", padding: "16px 32px", borderRadius: 12, fontWeight: 600, fontSize: 16, textDecoration: "none", boxShadow: "0 10px 26px rgba(14,99,199,0.3)" }}>Book en demo</Link>
         </section>
       </main>
 
