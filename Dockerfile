@@ -6,8 +6,8 @@
 # Stage 1: Install dependencies
 FROM node:20-slim AS deps
 WORKDIR /app
-COPY package.json ./
-RUN npm install npm install
+COPY package.json package-lock.json ./
+RUN npm ci
 
 # Stage 2: Build
 FROM node:20-slim AS build
@@ -19,8 +19,8 @@ RUN npm run build
 # Stage 3: Production dependencies only
 FROM node:20-slim AS production-deps
 WORKDIR /app
-COPY package.json ./
-RUN npm install --production
+COPY package.json package-lock.json ./
+RUN npm ci --omit=dev
 
 # Stage 4: Runtime
 FROM node:20-slim AS runtime
@@ -28,6 +28,8 @@ WORKDIR /app
 
 COPY --from=production-deps /app/node_modules ./node_modules
 COPY --from=build /app/build ./build
+COPY --from=build /app/drizzle ./drizzle
+COPY --from=build /app/scripts ./scripts
 COPY --from=build /app/package.json ./package.json
 
 ENV NODE_ENV=production

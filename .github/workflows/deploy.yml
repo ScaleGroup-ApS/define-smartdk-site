@@ -111,6 +111,8 @@ jobs:
         env:
           SHORT_SHA: ${{ needs.build-and-push.outputs.short-sha }}
         run: |
+          kubectl delete job -l "app=customer-site,component=migrate" -n "$NAMESPACE" --ignore-not-found
+
           # Delete any previous job for this SHA (idempotent re-runs)
           kubectl delete job "customer-site-migrate-${SHORT_SHA}" -n "$NAMESPACE" --ignore-not-found
 
@@ -120,10 +122,11 @@ jobs:
           kubectl wait job "customer-site-migrate-${SHORT_SHA}" \
             -n "$NAMESPACE" \
             --for=condition=complete \
-            --timeout=3m \
+            --timeout=5m \
             || {
               echo "--- Migration job logs ---"
-              kubectl logs -l "app=customer-site,component=migrate" -n "$NAMESPACE" --tail=100
+              kubectl describe job "customer-site-migrate-${SHORT_SHA}" -n "$NAMESPACE"
+              kubectl logs job/"customer-site-migrate-${SHORT_SHA}" -n "$NAMESPACE" --tail=100
               exit 1
             }
 
