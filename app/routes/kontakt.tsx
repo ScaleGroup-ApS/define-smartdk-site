@@ -1,3 +1,5 @@
+import { ContactSpamProtection } from '~/components/ContactSpamProtection';
+import { CONTACT_SPAM_ERROR, verifyContactSubmission } from '~/lib/contact-spam.server';
 import { useFetcher } from "react-router";
 import { safeParse, flatten } from "valibot";
 import type { Route } from "./+types/kontakt";
@@ -50,6 +52,10 @@ export async function action({ request }: Route.ActionArgs) {
       success: false as const,
       errors: flatten<typeof ContactSchema>(result.issues).nested,
     };
+  }
+
+  if (!(await verifyContactSubmission(form))) {
+    return { success: false as const, spamError: CONTACT_SPAM_ERROR, errors: {} as Record<string, [string, ...string[]]> };
   }
 
   const data = result.output;
@@ -203,6 +209,8 @@ function ContactForm() {
             <label htmlFor="besked" style={labelStyle}>Hvor mange lokationer? <span style={{ fontWeight: 400, color: "#94A8B8" }}>(valgfrit)</span></label>
             <textarea id="besked" name="besked" placeholder="fx 12 erhvervsejendomme i to byer" rows={3} style={{ ...inputStyle, resize: "vertical" }} />
           </div>
+          {fetcher.data && 'spamError' in fetcher.data && <p role="alert">{fetcher.data.spamError}</p>}
+          <ContactSpamProtection />
           <button type="submit" disabled={submitting} style={{ width: "100%", background: "#0E63C7", color: "#fff", border: "none", padding: 15, borderRadius: 11, fontWeight: 600, fontSize: 16, cursor: submitting ? "default" : "pointer", fontFamily: "inherit", boxShadow: "0 10px 24px rgba(14,99,199,0.26)", opacity: submitting ? 0.7 : 1 }}>
             {submitting ? "Sender …" : "Anmod om min demo"}
           </button>
