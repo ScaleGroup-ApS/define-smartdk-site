@@ -1,0 +1,23 @@
+name: Validate deployment workflow
+
+on:
+  pull_request:
+    paths:
+      - .github/scripts/migration-required.sh
+      - .github/scripts/migration-required.test.sh
+      - .github/workflows/deploy.yml
+      - .github/workflows/validate-deploy.yml
+
+permissions:
+  contents: read
+
+jobs:
+  migration-paths:
+    name: Test migration path detection
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Test migration path detection
+        run: .github/scripts/migration-required.test.sh
